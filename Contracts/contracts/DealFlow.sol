@@ -4,7 +4,10 @@ pragma solidity ^0.8.20;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IDealClient} from "./IDealClient.sol";
+import {IRegisterSubnetFacet} from "./IRegisterSubnetFacet.sol";
 import {DealRequest, ExtraParamsV1} from "./DealClient.sol";
+import {SubnetActorDiamond} from "./ipc/SubnetActorDiamond.sol";
+
 
 /**
  * @title DealFlow
@@ -20,8 +23,14 @@ contract DealFlow is Ownable {
     /// @notice deal client contract address
     IDealClient public dealClient;
 
+    /// @notice subnet registry contract address
+    IRegisterSubnetFacet public subnetRegistry;
+
     /// @notice Mapping of miner IDs to Miner details
     mapping(string => Miner) public minerRecord;
+
+    /// @notice Mapping of miner address to Miner id
+    mapping(address => string) public minerAuth;
 
     /// @notice Mapping of deal IDs to Deal details
     mapping(bytes32 => DealRequest) public dealRecord;
@@ -33,12 +42,15 @@ contract DealFlow is Ownable {
     mapping(string => bytes32[]) public minerDeals;
 
     struct Miner {
+        string id;
         address payable paymentReceiver;
         address paymentToken;
         uint256 pricePerGB;
         string location;
         uint256 maxDealDuration;
         bool retrieval;
+        bool verifiedDeal;
+        address listenAddress;
     }
 
     event MinerRegistered(string indexed minerId, address indexed minerAddress);
@@ -53,8 +65,9 @@ contract DealFlow is Ownable {
      * @dev Initializes the contract setting the initial stake amount and setting ownership.
      * @param _stakeAmount The initial stake amount required for miner registration.
      */
-    constructor(address _dealContract, uint _stakeAmount) Ownable(msg.sender) {
+    constructor(address _dealContract, address _subnetRegistry, uint _stakeAmount) Ownable(msg.sender) {
         dealClient = IDealClient(_dealContract);
+        subnetRegistry = IRegisterSubnetFacet(_subnetRegistry);
         stakeAmount = _stakeAmount;
     }
 
@@ -75,7 +88,8 @@ contract DealFlow is Ownable {
         uint256 pricePerGB,
         string memory location,
         uint256 maxDealDuration,
-        bool retrieval
+        bool retrieval,
+        bool verifiedDeal
     ) external payable {
         require(msg.value == stakeAmount, "Incorrect stake amount");
         require(
@@ -84,15 +98,18 @@ contract DealFlow is Ownable {
         );
 
         minerRecord[minerId] = Miner({
+            id: minerId,
             paymentReceiver: paymentReceiver,
             paymentToken: paymentToken,
             pricePerGB: pricePerGB,
             location: location,
             maxDealDuration: maxDealDuration,
-            retrieval: retrieval
+            retrieval: retrieval,
+            verifiedDeal: verifiedDeal,
+            listenAddress: address(this)
         });
         registeredMinerIds.push(minerId);
-
+        minerAuth[msg.sender] = minerId;
         emit MinerRegistered(minerId, msg.sender);
     }
 
@@ -108,7 +125,7 @@ contract DealFlow is Ownable {
         Miner memory miner = minerRecord[minerId];
         require(miner.paymentReceiver != address(0), "Miner not registered");
 
-        // user need to approve the following amount this contract
+        // user need to approve the following amount to this contract
         uint256 paymentAmount = getDealPrice(miner.pricePerGB, deal.piece_size);
         IERC20 paymentToken = IERC20(miner.paymentToken);
         require(
@@ -130,6 +147,17 @@ contract DealFlow is Ownable {
     }
 
     /**
+     * @notice Spins up a new subnet for a registered miner
+     * @param _minerId The ID of the miner who will own the new subnet
+     * @param _params The constructor parameters required to create the subnet
+     */
+    function spinSubnet(string memory _minerId, SubnetActorDiamond.ConstructorParams calldata _params) external {
+        require(minerAuth[msg.sender] == _minerId, "Unauthorized miner");
+        Miner storage miner = minerRecord[_minerId];
+        miner.listenAddress = subnetRegistry.newSubnetActor(_params);
+    }
+
+    /**
      * @notice Sets the stake amount for miners
      * @param _stakeAmount The stake amount in smallest unit
      */
@@ -146,9 +174,9 @@ contract DealFlow is Ownable {
     function getDealPrice(
         uint256 pricePerGB,
         uint256 sizeInBytes
-    ) public view returns (uint256) {
+    ) public pure returns (uint256) {
         uint256 sizeInGB = sizeInBytes / (1024 * 1024 * 1024);
-        return pricePerGB * sizeInBytes;
+        return pricePerGB * sizeInGB;
     }
 
     /**
