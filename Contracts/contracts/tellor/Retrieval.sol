@@ -1,3 +1,5 @@
+pragma solidity ^0.8.3;
+
 import "./Tellor-flatfile.sol";
 
 contract PriceContract {
@@ -7,7 +9,7 @@ contract PriceContract {
 
     // 0xb2CB696fE5244fB9004877e58dcB680cB86Ba444
     // This contract now has access to all functions in UsingTellor
-    constructor(address payable _tellorAddress) public {
+    constructor(address payable _tellorAddress) {
         tellor = TellorFlex(_tellorAddress);
     }
 
