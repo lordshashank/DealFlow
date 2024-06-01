@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.3;
 
 import "./Tellor-flatfile.sol";
@@ -13,7 +15,7 @@ contract PriceContract {
         tellor = TellorFlex(_tellorAddress);
     }
 
-    function getFileCid(string memory cid) public {
+    function getFileCid(string memory cid) external returns(string memory) {
         // "https://gateway.lighthouse.storage/ipfs/QmNVoZntCBiHq1PEqd1J31Ywy4crjVAVYFbMWMGUN2L3Lg"
 
         string memory url = string(
@@ -32,5 +34,7 @@ contract PriceContract {
         );
         fileCidInBytes = _value;
         retrieved_cid = abi.decode(_value, (string));
+
+        return retrieved_cid;
     }
 }

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.23;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IDealClient} from "./IDealClient.sol";
+import {IRetrieval} from "./IRetrieval.sol";
 import {IRegisterSubnetFacet} from "./IRegisterSubnetFacet.sol";
 import {DealRequest, ExtraParamsV1} from "./DealClient.sol";
 import {SubnetActorDiamond} from "./ipc/SubnetActorDiamond.sol";
-
 
 /**
  * @title DealFlow
@@ -23,6 +23,9 @@ contract DealFlow is Ownable {
     /// @notice deal client contract address
     IDealClient public dealClient;
 
+    /// @notice deal client contract address
+    IRetrieval public tellorRetrieval;
+
     /// @notice subnet registry contract address
     IRegisterSubnetFacet public subnetRegistry;
 
@@ -32,7 +35,10 @@ contract DealFlow is Ownable {
     /// @notice Mapping of miner address to Miner id
     mapping(address => string) public minerAuth;
 
-    /// @notice Mapping of deal IDs to Deal details
+    /// @notice Mapping of deal id to user address
+    mapping(bytes32 => address) public dealAuth;
+
+    /// @notice Mapping of deal ID to Deal details
     mapping(bytes32 => DealRequest) public dealRecord;
 
     /// @notice Mapping of user to their deal IDs
@@ -62,11 +68,20 @@ contract DealFlow is Ownable {
     );
 
     /**
-     * @dev Initializes the contract setting the initial stake amount and setting ownership.
-     * @param _stakeAmount The initial stake amount required for miner registration.
+     * @dev Constructor to initialize the DealFlow contract with necessary addresses and stake amount.
+     * @param _dealContract Address of the deal client contract.
+     * @param _tellorRetrieval Address of the Tellor retrieval contract.
+     * @param _subnetRegistry Address of the subnet registry contract.
+     * @param _stakeAmount Initial stake amount required for miner registration.
      */
-    constructor(address _dealContract, address _subnetRegistry, uint _stakeAmount) Ownable(msg.sender) {
+    constructor(
+        address _dealContract,
+        address _tellorRetrieval,
+        address _subnetRegistry,
+        uint _stakeAmount
+    ) Ownable(msg.sender) {
         dealClient = IDealClient(_dealContract);
+        tellorRetrieval = IRetrieval(_tellorRetrieval);
         subnetRegistry = IRegisterSubnetFacet(_subnetRegistry);
         stakeAmount = _stakeAmount;
     }
@@ -146,13 +161,30 @@ contract DealFlow is Ownable {
         emit DealProposed(dealId, minerId, msg.sender);
     }
 
+    function challenge(bytes32 _dealId) external{
+        require(dealAuth[_dealId] == msg.sender, "Unauthorised deal creator");
+        string memory expectedCID = dealRecord[_dealId].label;
+        string memory retrievedCID = tellorRetrieval.getFileCid(expectedCID);
+        if (keccak256(abi.encodePacked(expectedCID)) != keccak256(abi.encodePacked(retrievedCID))){
+            payable(msg.sender).transfer(stakeAmount);
+            
+        }
+    }
+
     /**
      * @notice Spins up a new subnet for a registered miner
      * @param _minerId The ID of the miner who will own the new subnet
      * @param _params The constructor parameters required to create the subnet
      */
-    function spinSubnet(string memory _minerId, SubnetActorDiamond.ConstructorParams calldata _params) external {
-        require(minerAuth[msg.sender] == _minerId, "Unauthorized miner");
+    function spinSubnet(
+        string memory _minerId,
+        SubnetActorDiamond.ConstructorParams calldata _params
+    ) external {
+        require(
+            keccak256(abi.encodePacked(minerAuth[msg.sender])) ==
+                keccak256(abi.encodePacked(_minerId)),
+            "Unauthorized miner"
+        );
         Miner storage miner = minerRecord[_minerId];
         miner.listenAddress = subnetRegistry.newSubnetActor(_params);
     }
