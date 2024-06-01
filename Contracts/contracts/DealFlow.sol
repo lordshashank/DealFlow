@@ -136,21 +136,24 @@ contract DealFlow is Ownable {
     function proposeDeal(
         string memory minerId,
         DealRequest calldata deal
-    ) external {
+    ) external payable {
         Miner memory miner = minerRecord[minerId];
         require(miner.paymentReceiver != address(0), "Miner not registered");
-
-        // user need to approve the following amount to this contract
         uint256 paymentAmount = getDealPrice(miner.pricePerGB, deal.piece_size);
-        IERC20 paymentToken = IERC20(miner.paymentToken);
-        require(
-            paymentToken.transferFrom(
-                msg.sender,
-                miner.paymentReceiver,
-                paymentAmount
-            ),
-            "Payment failed"
-        );
+        if (miner.paymentToken == address(0)){
+            require(msg.value >= paymentAmount, "Insufficient deal payment");
+        } else {
+            // user need to approve the following amount to this contract
+            IERC20 paymentToken = IERC20(miner.paymentToken);
+            require(
+                paymentToken.transferFrom(
+                    msg.sender,
+                    miner.paymentReceiver,
+                    paymentAmount
+                ),
+                "Payment failed"
+            );
+        }
 
         bytes32 dealId = dealClient.makeDealProposal(deal);
 

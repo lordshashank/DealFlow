@@ -29,12 +29,12 @@ module.exports = {
     Calibration: {
       chainId: 314159,
       url: "https://api.calibration.node.glif.io/rpc/v1",
-      accounts: ["Ox"],
+      accounts: [],
     },
     FilecoinMainnet: {
       chainId: 314,
       url: "https://api.node.glif.io",
-      accounts: ["0x"],
+      accounts: [],
     },
   },
 };
