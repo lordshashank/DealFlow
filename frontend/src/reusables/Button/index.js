@@ -11,7 +11,7 @@ export default function Button({
     <button
       className={`${styles.btn} ${styles[variant]} ${styles[size]}`}
       onClick={onClick}
-      disabled
+      disabled={disabled}
       {...props}
     >
       {label}

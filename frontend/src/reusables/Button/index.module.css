@@ -6,10 +6,16 @@
   font-weight: 500;
   cursor: pointer;
   text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 .btn:hover {
   background-color: #1e5ee4;
+}
+.btn:disabled {
+  background-color: #b3b3b3;
+  color: #ffffff;
+  cursor: not-allowed;
 }
 
 .btn.primary {
@@ -23,7 +29,9 @@
 }
 
 .btn.small {
-  font-size: 12px;
+  font-size: 16px;
+  padding: 0.3rem 0.7rem;
+  border: none;
 }
 .btn.medium {
   font-size: 16px;

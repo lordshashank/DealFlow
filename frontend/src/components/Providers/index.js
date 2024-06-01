@@ -33,18 +33,7 @@ const appName = "DealFlow";
 const wagmiConfig = getDefaultConfig({
   appName,
   projectId,
-  chains: [
-    filecoinCalibration,
-    polygonMumbai,
-    goerli,
-    arbitrumGoerli,
-    fantomTestnet,
-    optimismGoerli,
-    avalancheFuji,
-    moonbaseAlpha,
-    celoAlfajores,
-    mantleTestnet,
-  ],
+  chains: [filecoinCalibration],
   ssr: true,
 });
 

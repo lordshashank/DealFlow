@@ -4,6 +4,7 @@ import styles from "@/styles/page.module.css";
 import Button from "@/reusables/Button";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import RoleModal from "@/components/RoleModal";
+import MinerModal from "@/components/MinerModal";
 import { useAccount } from "wagmi";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <RoleModal />
+      <MinerModal />
       <div className={styles.description}>
         <section className={styles.section}>
           <div className={styles["content-box"]}>

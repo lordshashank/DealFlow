@@ -50,7 +50,6 @@ function Navigation() {
   };
   return (
     <nav className={styles.nav}>
-      <button onClick={handleMinerStake}>Register Miner</button>
       <ul className={styles["nav-list"]}>
         {navigationItems.map((item) => (
           <li key={item.label} className={styles["nav-item"]}>

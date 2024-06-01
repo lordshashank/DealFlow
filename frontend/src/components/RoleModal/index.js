@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useUser } from "@/context/userContext";
 
 export default function RoleModal() {
-  const { user, changeRole } = useUser();
+  const { user, handleChangeRole } = useUser();
   return (
     <Modal open={!user.roleChoose && user.isConnected}>
       <div className={styles.modal}>
@@ -15,7 +15,7 @@ export default function RoleModal() {
               user.role === "user" ? styles.selected : ""
             }`}
             onClick={() => {
-              changeRole("user");
+              handleChangeRole("user");
             }}
           >
             <Image src={"user-large.svg"} alt="user" width={188} height={225} />
@@ -26,7 +26,7 @@ export default function RoleModal() {
               user.role === "miner" ? styles.selected : ""
             }`}
             onClick={() => {
-              changeRole("miner");
+              handleChangeRole("miner");
             }}
           >
             <Image
