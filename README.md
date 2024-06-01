@@ -23,25 +23,23 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/lordshashank/dealflow">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="frontend/public/logo.svg" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">DealFlow</h3>
 
   <p align="center">
-    Complete deal-making solution for Filecoin ecosystem
+DealFlow: Unlocking Decentralized File Storage on Filecoin with Seamless Autonomy, Verifiable Security, and Robust, Scalable Solutions for Users and Storage Providers.
     <br />
-    <a href="https://github.com/lordshashank/dealflow"><strong>Explore the docs »</strong></a>
+    <a href="https://ethglobal.com/showcase/dealflow-af4xp"><strong>Explore the project »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/lordshashank/dealflow">View Demo</a>
+    <a href="https://ethglobal.com/showcase/dealflow-af4xp">View Demo</a>
     ·
     <a href="https://github.com/lordshashank/dealflow/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
@@ -66,7 +64,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#How-we-built-it">How we built it?</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -81,7 +79,16 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `lordshashank`, `dealflow`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+Storing Files in a decentralized way, not having to trust centralized servers, and having the same accessibility, who doesn’t want that?
+Filecoin has been leading in the space of decentralized storage and presents a perfect solution to the problem, at least on the protocol level. Still, there are many blockers in connecting users who want to store files and Storage providers who want to store them. Moreover, many of the existing solutions to store data in Filecoin have centralized points, are non-retrievable on-chain and there’s no way to verify the storage easily.
+DealFlow aims to solve these problems. It is an on-chain solution for the complete verifiable flow of storing files in Filecoin for SPs and end-users. It aims to give complete autonomy to both SPs to decide on their needs and specs and users to choose from different miners having various deliverables.
+The main features of DealFlow are:-
+
+- **IPC for scaling:** It's on-chain 🙂. However, having single transaction for each file on mainnet is not at all feasible. IPC comes to the rescue here. Miners can set up their own subnets on-chain from the DealFlow contract, decide its specs, and change or delete them. They can set up their hardware in coherence with subnet for robust deal making process.
+- **Stablecoin payment for Storage Providers:** SPs can register for payment in native or any other on-chain stablecoin. They can configure their subnet specs like collateral, etc with same coin, giving them complete autonomy.
+- **Verifiable storage and Retrieval:** If you thought deal making so intensive, there’s another problem, how to verify that your file is actually stored? Typical solutions to this are PODSI or retrievability. User wants his data to be retrievable throughout the deal. DealFlow enables it with help of TELLOR oracles. User can challenge any deal, and tellor reporters would post CID on-chain, which can then be verified and miner can be slashed if not validated. With IPC miner can opt to post PODSI on-chain for deal verifiability as well.
+- **Easy UI:** In the Filecoin network, there’s no one perfect place for miners and users to get all the options they need. With DealFlow, miner can register themselves with their asks (easily updatable), handle the subnets, view deal status, etc. Users would be able to see all available miners with their specs to choose from and verify retrieval and storage.
+  With DealFlow, we aim to flow deals into Filecoin network, make a free-flowing experience for SPs and miners, and solve the universal problem of centralized storage.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,12 +96,11 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 - [![Next][Next.js]][Next-url]
 - [![React][React.js]][React-url]
-- [![Vue][Vue.js]][Vue-url]
-- [![Angular][Angular.io]][Angular-url]
-- [![Svelte][Svelte.dev]][Svelte-url]
-- [![Laravel][Laravel.com]][Laravel-url]
-- [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-- [![JQuery][JQuery.com]][JQuery-url]
+- [Filecoin]
+- [FVM]
+- [IPC]
+- [Beryx]
+- [Tellor]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -102,33 +108,32 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+You can look and interact with our frontend and backend code here. The frontend is built using Next.js and the backend is built using Hardhat and Solidity.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
+- Node.js
 - npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/lordshashank/dealflow.git
    ```
-3. Install NPM packages
+2. Initialize the backend
    ```sh
+   cd contracts
    npm install
+   npm hardhat compile
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = "ENTER YOUR API";
+3. Initialize the frontend
+   ```sh
+   cd ../frontend
+    npm install
+    npm run dev
    ```
+4. Open the frontend on localhost:3000
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -136,9 +141,29 @@ This is an example of how to list things you need to use the software and how to
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+We have used various technologies to make DealFlow functional.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+### Filecoin and FVM
+
+As being on-chain we used a lot of Filecoin-solidity library to get on-chain data on deals, miners, etc. We implemented deal-making through Filecoin-client contracts, keeping deals on-chain.
+
+### IPC
+
+IPC helps us scale everything on-chain. We spin subnets directly from our contract for each registered miner. The miner can handle the whole deal-making process through this subnet, and have a choice of tokens, collateral, consensus, etc. IPC gives us options for on-chain PODSI verification, etc with its infinite scaling capabilities. While integrating IPC, had to do it manually due to lack of package, thus collaborated with IPC team, and helped resolve few bugs to unblock package publishing through PRs leading to the first smart contract IPC package.
+
+### Tellor
+
+Tellor comes into play for verification, FileCid and DealStatus specs of tellor help to challenge miner retrieval and deals and slash them in case of failure compensating the user.
+
+### Beryx
+
+We don’t like backends in our dApps but this was not possible without Beryx APIs, they provided us directly usable APIs to fetch metadata for various Tokens miners can choose to pay from, giving them wide options and making our dApp give fast responses as well.
+
+### Fleek
+
+Building a dApp and deploying only on centralized services don’t seem apt, we used Fleek to decentralize our deployments
+
+_For more examples, please refer to the [project](https://ethglobal.com/showcase/dealflow-af4xp)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -146,12 +171,12 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-  - [ ] Nested Feature
+We look forward to building more features and making DealFlow more robust and scalable. Some of the features we plan to add are:-
 
-See the [open issues](https://github.com/lordshashank/dealflow/issues) for a full list of proposed features (and known issues).
+- Miner implemenatation of IPC stack for easy to onboard miners
+- Make dApp cross-chain compatible using axelar, etc
+- File privacy encryption and
+- FIle sharing by giving access to files to other accounts
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -184,7 +209,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Your Name - [0xlord_forever](https://twitter.com/0xlord_forever) - shashanktrivedi1917@gmail.com
 
 Project Link: [https://github.com/lordshashank/dealflow](https://github.com/lordshashank/dealflow)
 
@@ -194,9 +219,8 @@ Project Link: [https://github.com/lordshashank/dealflow](https://github.com/lord
 
 ## Acknowledgments
 
-- []()
-- []()
-- []()
+- Thanks to Ethglobal mentors for guiding us through the project
+- Thanks to Filecoin, FVM, IPC and Tellor for helping us throughout the project, solving bugs, etc.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -232,3 +256,8 @@ Project Link: [https://github.com/lordshashank/dealflow](https://github.com/lord
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com
+[Beryx]: https://docs.zondax.ch/
+[Filecoin]: https://filecoin.io/
+[FVM]: https://fvm.filecoin.io/
+[IPC]: https://docs.ipc.space/
+[Tellor]: https://tellor.io/
