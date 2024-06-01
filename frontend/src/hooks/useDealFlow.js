@@ -1,8 +1,20 @@
 import { contractAddress, abi } from "../../constants";
-import { useWriteContract } from "wagmi";
+import { useWriteContract, useReadContract } from "wagmi";
+import { bytesToHex, parseEther } from "viem";
 
 const useDealFlow = () => {
-  const { writeContractAsync, readContractAsync } = useWriteContract();
+  const { writeContractAsync } = useWriteContract();
+  // const minerParams = [
+  //   "t017840",
+  //   "0x9299eac94952235Ae86b94122D2f7c77F7F6Ad30",
+  //   "0x4a8c75f0318C1D9Aeff3e9345f4BAcC78D6D6779",
+  //   "10000",
+  //   "asia",
+  //   "10000000",
+  //   true,
+  //   true,
+  // ];
+
   const registerMiner = async (minerParams) => {
     try {
       const response = await writeContractAsync(
@@ -11,7 +23,7 @@ const useDealFlow = () => {
           args: minerParams,
           abi: abi.DealFlow,
           functionName: "registerMiner",
-          value: "1000000000000",
+          value: "10000000000000",
         },
         {
           onSuccess: () => {
@@ -29,12 +41,16 @@ const useDealFlow = () => {
 
   const proposeDeal = async (minerId, dealParams) => {
     try {
+      const piece_cid = bytesToHex(new Uint8Array(dealParams.shift()));
+      const deal = [piece_cid, ...dealParams];
+      console.log(deal);
       const response = await writeContractAsync(
         {
           address: contractAddress.DealFlow,
-          args: [minerId, dealParams],
+          args: [minerId, deal],
           abi: abi.DealFlow,
           functionName: "proposeDeal",
+          // value
         },
         {
           onSuccess: () => {
@@ -49,6 +65,25 @@ const useDealFlow = () => {
       console.log(error);
     }
   };
+  // const subnetParams = [
+  //   "100000", // minActivationCollateral
+  //   "1", // minValidators
+  //   "2", // bottomUpCheckPeriod
+  //   "0x6d25fbFac9e6215E03C687E54F7c74f489949EaF", // ipc gateway
+  //   "5", // activeValidatorlimit
+  //   "60", // majority percentage
+  //   "0", //"fendermint", // consensus type
+  //   "1", // power scale
+  //   "0", //"Collateral", // permission mode
+  //   [
+  //     "0", //native supply
+  //     "0x0000000000000000000000000000000000000000",
+  //   ],
+  //   [
+  //     "317149", //chain id
+  //     ["0x52b832b3b44394c51297aea8f6dda56aae677eab"], //route
+  //   ],
+  // ];
   const spinSubnet = async (minerId, subnetParams) => {
     try {
       const response = await writeContractAsync(
@@ -71,9 +106,32 @@ const useDealFlow = () => {
       console.log(error);
     }
   };
-  const getDealPrice = async (pricePerGb, sizeInBytes) => {
+
+  const challengeDeal = async (dealId) => {
     try {
       const response = await writeContractAsync(
+        {
+          address: contractAddress.DealFlow,
+          args: [dealId],
+          abi: abi.DealFlow,
+          functionName: "challenge",
+        },
+        {
+          onSuccess: () => {
+            console.log("Deal Challenged Successfully!");
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getDealPrice = (pricePerGb, sizeInBytes) => {
+    try {
+      const response = useReadContract(
         {
           address: contractAddress.DealFlow,
           args: [pricePerGb, sizeInBytes],
@@ -89,17 +147,17 @@ const useDealFlow = () => {
           },
         }
       );
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   };
-  const getAllRegisteredMiners = async () => {
+  const getAllRegisteredMiners = () => {
     try {
-      const response = await writeContractAsync(
+      const response = useReadContract(
         {
           address: contractAddress.DealFlow,
-          args: [],
+          // args: [],
           abi: abi.DealFlow,
           functionName: "getAllRegisteredMiners",
         },
@@ -112,14 +170,15 @@ const useDealFlow = () => {
           },
         }
       );
-      return response;
+      console.log(response);
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   };
-  const getUserDeals = async (userAddress) => {
+  const getUserDeals = (userAddress) => {
     try {
-      const response = await writeContractAsync(
+      const response = useReadContract(
         {
           address: contractAddress.DealFlow,
           args: [userAddress],
@@ -135,19 +194,19 @@ const useDealFlow = () => {
           },
         }
       );
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   };
-  const getMinerDeals = async (minerId) => {
+  const getMinerDeals = (minerId) => {
     try {
-      const response = await writeContractAsync(
+      const response = useReadContract(
         {
-          address: contractAddress.DealFlow,
-          args: [minerId],
           abi: abi.DealFlow,
+          address: contractAddress.DealFlow,
           functionName: "minerDeals",
+          args: [minerId],
         },
         {
           onSuccess: () => {
@@ -158,14 +217,14 @@ const useDealFlow = () => {
           },
         }
       );
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   };
-  const getMinerId = async (minerAddress) => {
+  const getMinerId = (minerAddress) => {
     try {
-      const response = await writeContractAsync(
+      const response = useReadContract(
         {
           address: contractAddress.DealFlow,
           args: [minerAddress],
@@ -181,14 +240,14 @@ const useDealFlow = () => {
           },
         }
       );
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   };
-  const getMinerDetails = async (minerId) => {
+  const getMinerDetails = (minerId) => {
     try {
-      const response = await writeContractAsync(
+      const response = useReadContract(
         {
           address: contractAddress.DealFlow,
           args: [minerId],
@@ -204,30 +263,30 @@ const useDealFlow = () => {
           },
         }
       );
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   };
-  const minerStake = async () => {
+  const minerStake = () => {
     try {
-      const response = await writeContractAsync(
+      const response = useReadContract(
         {
-          address: contractAddress.DealFlow,
-          args: [],
           abi: abi.DealFlow,
+          address: contractAddress.DealFlow,
           functionName: "stakeAmount",
         },
         {
           onSuccess: () => {
-            console.log("Miner Staked Successfully!");
+            console.log("Fetched stake amount successfully!");
           },
           onError: (error) => {
             console.log(error);
           },
         }
       );
-      return response;
+      console.log(Number(response.data));
+      return response.data;
     } catch (error) {
       console.log(error);
     }
@@ -243,6 +302,7 @@ const useDealFlow = () => {
     getMinerId,
     getMinerDetails,
     minerStake,
+    challengeDeal,
   };
 };
 export default useDealFlow;
