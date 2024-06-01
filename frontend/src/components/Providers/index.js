@@ -26,6 +26,10 @@ import {
   mantleTestnet,
 } from "wagmi/chains";
 
+import { UserProvider } from "@/context/userContext";
+import { DealProvider } from "@/context/DealContext";
+import { MinerProvider } from "@/context/minerContext";
+
 const projectId = "7ab7ac25d652c1675ac0a89cf2042275";
 
 const appName = "DealFlow";
@@ -55,7 +59,13 @@ export function Providers({ children }) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+        <RainbowKitProvider>
+          <UserProvider>
+            <DealProvider>
+              <MinerProvider>{children}</MinerProvider>
+            </DealProvider>
+          </UserProvider>
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

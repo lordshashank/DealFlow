@@ -7,16 +7,7 @@ import Actions from "./Actions";
 
 export default function DealCard({ deal }) {
   const [showActions, setShowActions] = useState(false);
-  const {
-    startTime,
-    endTime,
-    pieceCid,
-    clientAddress,
-    size,
-    fileName,
-    miner,
-    dealId,
-  } = deal;
+  const { startTime, endTime, pieceCid, size, fileName, miner } = deal;
   const { user } = useUser();
 
   const actions =

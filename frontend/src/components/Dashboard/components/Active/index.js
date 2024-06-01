@@ -1,5 +1,6 @@
 import DealCard from "@/components/DealCard";
 import styles from "../../index.module.css";
+import { useDeals } from "@/context/DealContext";
 
 const dummyDeal = {
   fileName: "file.txt",
@@ -12,15 +13,15 @@ const dummyDeal = {
   endTime: "2027-09-30T00:00:00Z",
 };
 export default function Active() {
-  const dummyDeals = Array.from({ length: 5 }, (_, i) => ({
-    ...dummyDeal,
-    dealId: i + 1,
-  }));
+  const { filterDeals } = useDeals();
+  const activeDeals = filterDeals("active");
   return (
     <div className={styles["container"]}>
-      {dummyDeals.map((deal) => (
-        <DealCard deal={deal} key={deal.dealId} />
-      ))}
+      {activeDeals.length > 0 ? (
+        activeDeals.map((deal) => <DealCard deal={deal} key={deal.fileName} />)
+      ) : (
+        <h1>No active deals</h1>
+      )}
     </div>
   );
 }

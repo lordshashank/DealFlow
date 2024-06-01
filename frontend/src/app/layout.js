@@ -3,7 +3,6 @@ import "@/styles/globals.css";
 import { Providers } from "@/components/Providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { UserProvider } from "@/context/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 const epilogue = Epilogue({ subsets: ["latin"] });
@@ -18,11 +17,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={epilogue.className}>
         <Providers>
-          <UserProvider>
-            <Header />
-            {children}
-            <Footer />
-          </UserProvider>
+          <Header />
+          {children}
+          <Footer />
         </Providers>
       </body>
     </html>

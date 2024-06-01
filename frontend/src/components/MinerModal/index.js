@@ -30,11 +30,10 @@ export default function MinerModal() {
     e.preventDefault();
     try {
       const minerDetails = Object.values(user.minerDetails);
-      console.log(minerDetails);
-      // await registerMiner(minerDetails);
-      // await minerStake();
-      // handleChangeUser("isRegistered", true);
-      // router.push("/dashboard?");
+      await registerMiner(minerDetails);
+      await minerStake();
+      handleChangeUser("isRegistered", true);
+      router.push("/dashboard?");
     } catch (error) {
       console.log(error);
     }

@@ -1,12 +1,13 @@
 import DashboardNav from "@/reusables/DashboardNav";
 import { useState, useEffect } from "react";
 import { Active, Pending, Challenged } from "../components";
+import { Subnet } from "./components";
 import useDealFlow from "@/hooks/useDealFlow";
 import styles from "./index.module.css";
 import { useReadContract } from "wagmi";
 import { contractAddress, abi } from "../../../../constants";
 export default function Miner() {
-  const list = ["pending", "active", "challenged", "profile"];
+  const list = ["pending", "active", "challenged", "subnet"];
   const [selected, setSelected] = useState("active");
   const handleSelectMenuItem = (item) => {
     setSelected(item);
@@ -43,6 +44,7 @@ export default function Miner() {
         {selected === "active" && <Active />}
         {selected === "pending" && <Pending />}
         {selected === "challenged" && <Challenged />}
+        {selected === "subnet" && <Subnet />}
       </div>
     </div>
   );

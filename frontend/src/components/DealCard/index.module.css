@@ -60,6 +60,7 @@
   font-weight: 300;
   line-height: 12.3px;
   color: #8f8b8b;
+  word-break: break-all;
 }
 
 .miner-address > p > span {
