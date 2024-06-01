@@ -142,6 +142,7 @@ contract DealFlow is Ownable {
         uint256 paymentAmount = getDealPrice(miner.pricePerGB, deal.piece_size);
         if (miner.paymentToken == address(0)){
             require(msg.value >= paymentAmount, "Insufficient deal payment");
+            payable(miner.paymentReceiver).transfer(paymentAmount);
         } else {
             // user need to approve the following amount to this contract
             IERC20 paymentToken = IERC20(miner.paymentToken);
