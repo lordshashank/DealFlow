@@ -106,7 +106,7 @@ contract DealFlow is Ownable {
         bool retrieval,
         bool verifiedDeal
     ) external payable {
-        require(msg.value == stakeAmount, "Incorrect stake amount");
+        require(msg.value >= stakeAmount, "Incorrect stake amount");
         require(
             minerRecord[minerId].paymentReceiver == address(0),
             "Miner already registered"
@@ -140,7 +140,7 @@ contract DealFlow is Ownable {
         Miner memory miner = minerRecord[minerId];
         require(miner.paymentReceiver != address(0), "Miner not registered");
         uint256 paymentAmount = getDealPrice(miner.pricePerGB, deal.piece_size);
-        if (miner.paymentToken == address(0)){
+        if (miner.paymentToken == address(0)) {
             require(msg.value >= paymentAmount, "Insufficient deal payment");
             payable(miner.paymentReceiver).transfer(paymentAmount);
         } else {
@@ -165,13 +165,15 @@ contract DealFlow is Ownable {
         emit DealProposed(dealId, minerId, msg.sender);
     }
 
-    function challenge(bytes32 _dealId) external{
+    function challenge(bytes32 _dealId) external {
         require(dealAuth[_dealId] == msg.sender, "Unauthorised deal creator");
         string memory expectedCID = dealRecord[_dealId].label;
         string memory retrievedCID = tellorRetrieval.getFileCid(expectedCID);
-        if (keccak256(abi.encodePacked(expectedCID)) != keccak256(abi.encodePacked(retrievedCID))){
+        if (
+            keccak256(abi.encodePacked(expectedCID)) !=
+            keccak256(abi.encodePacked(retrievedCID))
+        ) {
             payable(msg.sender).transfer(stakeAmount);
-            
         }
     }
 

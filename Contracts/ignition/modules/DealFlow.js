@@ -3,7 +3,11 @@ const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 module.exports = buildModule("DealFLowModule", (m) => {
   const dealContractAddress = m.getParameter(
     "dealClientAddress",
-    "0xFe643b54727d53C49835f9f6c1a2B9861E741d98"
+    "0x68de4962694b8e8ee61d59d8acb4e142e8e5ba51"
+  );
+  const tellorRetrievalAddress = m.getParameter(
+    "tellorRetrievalAddress",
+    "0xb2CB696fE5244fB9004877e58dcB680cB86Ba444"
   );
   const subnetRegistryAddress = m.getParameter(
     "subnetRegistryAddress",
@@ -13,6 +17,7 @@ module.exports = buildModule("DealFLowModule", (m) => {
 
   const dealFlow = m.contract("DealFlow", [
     dealContractAddress,
+    tellorRetrievalAddress,
     subnetRegistryAddress,
     stakeAmount,
   ]);

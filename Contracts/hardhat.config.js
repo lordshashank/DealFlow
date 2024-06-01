@@ -1,6 +1,8 @@
 require("@nomicfoundation/hardhat-toolbox");
-
+// config dotenv
+require("dotenv").config();
 /** @type import('hardhat/config').HardhatUserConfig */
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 module.exports = {
   solidity: {
     compilers: [
@@ -29,12 +31,12 @@ module.exports = {
     Calibration: {
       chainId: 314159,
       url: "https://api.calibration.node.glif.io/rpc/v1",
-      accounts: [],
+      accounts: [PRIVATE_KEY],
     },
     FilecoinMainnet: {
       chainId: 314,
       url: "https://api.node.glif.io",
-      accounts: [],
+      accounts: [PRIVATE_KEY],
     },
   },
 };
