@@ -7,7 +7,9 @@ import Selector from "@/reusables/Selector";
 import Button from "@/reusables/Button";
 import { useRouter } from "next/navigation";
 import useDealFlow from "@/hooks/useDealFlow";
+import { getKeyByValue } from "@/utils/helper";
 import { paymentTokens } from "@/utils/paymentTokens";
+import toast from "react-hot-toast";
 
 export default function MinerModal() {
   const { user, handleChangeMinerDetails, handleChangeUser } = useUser();
@@ -30,8 +32,15 @@ export default function MinerModal() {
     e.preventDefault();
     try {
       const minerDetails = Object.values(user.minerDetails);
-      await registerMiner(minerDetails);
-      await minerStake();
+      console.log(minerDetails);
+      const result = registerMiner(minerDetails);
+      toast.promise(result, {
+        loading: "Registering Miner...",
+        success: "Miner Registered!",
+        error: "Failed to Register",
+      });
+
+      // await minerStake();
       handleChangeUser("isRegistered", true);
       router.push("/dashboard?");
     } catch (error) {
@@ -60,7 +69,7 @@ export default function MinerModal() {
             name="token"
             placeholder="PREFERRED PAYMENT TOKEN"
             state={"enabled"}
-            selected={user.minerDetails.token}
+            selected={getKeyByValue(paymentTokens, user.minerDetails.token)}
             list={Object.keys(paymentTokens)}
             handleSelectMenuItem={(item) => {
               handleSelectMenuItem("token", paymentTokens[item]);
@@ -69,11 +78,18 @@ export default function MinerModal() {
             width="100%"
           />
           <TextField
+            name="minerId"
+            placeholder="MINER ID"
+            value={user.minerDetails.minerId}
+            onChange={handleChangeDetails}
+          />
+          <TextField
             name="price"
             placeholder="PRICE PER GB"
             value={user.minerDetails.price}
             onChange={handleChangeDetails}
           />
+
           <TextField
             name="location"
             placeholder="LOCATION"
