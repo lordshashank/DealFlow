@@ -1,17 +1,7 @@
 "use client";
 import { useState, createContext, useContext } from "react";
 
-const defaultSubnet = [
-  {
-    fileName: "high-fi.png",
-    size: "83473847",
-    miner: "t017840",
-    pieceCid: "bafybeib3e32n2isls5yertlfcmsaqxpisryunis3rknxca26n4jcqdpymm",
-    startTime: "2024-06-01T00:00:00.000Z",
-    endTime: "2024-09-05T00:00:00.000Z",
-    status: "active",
-  },
-];
+const defaultSubnet = [];
 
 const MinerContext = createContext(null);
 
@@ -30,11 +20,15 @@ export const MinerProvider = ({ children }) => {
     setSubnets((prev) => [...prev, deal]);
   };
 
+  const handleDeleteSubnet = (subnetID) => {
+    setSubnets((prev) => prev.filter((subnet) => subnet.subnetID !== subnetID));
+  };
   return (
     <MinerContext.Provider
       value={{
         subnets,
         handleAddSubnet,
+        handleDeleteSubnet,
       }}
     >
       {children}

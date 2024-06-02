@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 import { usePathname } from "next/navigation";
 import useDealFlow from "@/hooks/useDealFlow";
+import { useUser } from "@/context/userContext";
 const navigationItems = [
   {
     label: "Home",
@@ -20,6 +21,7 @@ const navigationItems = [
 ];
 function Navigation() {
   const { isConnected } = useAccount();
+  const { user } = useUser();
   const pathname = usePathname();
   console.log(pathname);
   const minerParams = [
@@ -63,7 +65,7 @@ function Navigation() {
             </Link>
           </li>
         ))}
-        {isConnected && (
+        {isConnected && user.roleChoose && (
           <li className={styles["nav-item"]}>
             <Link
               href="/dashboard"

@@ -4,29 +4,50 @@ import Image from "next/image";
 import { formatFileSize, getFormattedDate } from "@/utils/helper";
 import { useUser } from "@/hooks/useUser";
 import Actions from "./Actions";
+import { useDeals } from "@/context/DealContext";
+import toast from "react-hot-toast";
+import useDealFlow from "@/hooks/useDealFlow";
 
-export default function DealCard({ deal }) {
+export default function DealCard({ deal, isChallenge = false }) {
   const [showActions, setShowActions] = useState(false);
   const { startTime, endTime, pieceCid, size, fileName, miner } = deal;
   const { user } = useUser();
-
+  const { handleStatusChange } = useDeals();
+  const { challengeDealDup } = useDealFlow();
   const actions =
     user.role === "user"
-      ? [
-          {
-            label: "Challenge",
-            icon: "/challenge.svg",
-            onClick: () => {
-              console.log("Challenge");
+      ? isChallenge
+        ? [
+            {
+              label: "Verify",
+              onClick: () => {
+                toast.error("Deal yet to be Proven!");
+              },
             },
-          },
-          {
-            label: "View Deal",
-            onClick: () => {
-              console.log("View Deal");
+          ]
+        : [
+            {
+              label: "Challenge",
+              icon: "/challenge.svg",
+              onClick: async () => {
+                const result = challengeDealDup();
+                toast.promise(result, {
+                  loading: "Challenging...",
+                  success: (data) => {
+                    handleStatusChange(fileName, "challenged");
+                    return "Deal Challenged!";
+                  },
+                  error: "Failed to Challenge",
+                });
+              },
             },
-          },
-        ]
+            {
+              label: "View Deal",
+              onClick: () => {
+                console.log("View Deal");
+              },
+            },
+          ]
       : [
           {
             label: "View Deal",
@@ -53,6 +74,7 @@ export default function DealCard({ deal }) {
         <div className={styles["deal-size"]}>
           <p>{fileName}</p>
         </div>
+
         <div className={styles["deal-actions"]}>
           <Image
             className={styles.img}
@@ -64,8 +86,11 @@ export default function DealCard({ deal }) {
               setShowActions(!showActions);
             }}
           />
+          {showActions && <Actions actions={actions} />}
         </div>
-        {showActions && <Actions actions={actions} />}
+      </div>
+      <div className={styles["deal-size"]}>
+        <p>{formatFileSize(size)}</p>
       </div>
       <div className={styles["deal-body"]}>
         <div className={styles["date-row"]}>
@@ -73,7 +98,7 @@ export default function DealCard({ deal }) {
             {getFormattedDate(new Date(startTime))}
             {" - "}
             {getFormattedDate(new Date(endTime))}
-            {" IST"}
+            {" (IST)"}
           </p>
         </div>
         <div className={styles["progress-bar"]} style={{ width: width }}></div>

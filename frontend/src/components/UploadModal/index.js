@@ -9,6 +9,7 @@ export default function UploadModal({
   isOpen,
   handleClose,
   handleMakeDeal,
+  isLoading,
 }) {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -41,11 +42,17 @@ export default function UploadModal({
           )}
         </div>
         <div className={styles.actions}>
-          <Button
-            variant="primary"
-            label="Make Deal"
-            onClick={handleMakeDeal}
-          />
+          {isLoading ? (
+            <div className="spinner"></div>
+          ) : (
+            <Button
+              variant="primary"
+              label="Make Deal"
+              onClick={handleMakeDeal}
+              isLoading={isLoading}
+            />
+          )}
+
           <Button variant="secondary" label="cancel" onClick={handleClose} />
         </div>
       </div>

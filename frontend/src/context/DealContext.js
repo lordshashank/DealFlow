@@ -34,12 +34,21 @@ export const DealProvider = ({ children }) => {
     return deals.filter((deal) => deal.status === status);
   };
 
+  const handleStatusChange = (fileName, status) => {
+    setDeals((prev) =>
+      prev.map((deal) =>
+        deal.fileName === fileName ? { ...deal, status } : deal
+      )
+    );
+  };
+
   return (
     <DealContext.Provider
       value={{
         deals,
         handleAddDeal,
         filterDeals,
+        handleStatusChange,
       }}
     >
       {children}

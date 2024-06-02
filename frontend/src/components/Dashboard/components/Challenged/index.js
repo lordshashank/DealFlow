@@ -8,7 +8,7 @@ export default function Challenged() {
     <div className={styles.container}>
       {challengedDeals.length > 0 ? (
         challengedDeals.map((deal) => (
-          <DealCard deal={deal} key={deal.fileName} />
+          <DealCard deal={deal} key={deal.fileName} isChallenge />
         ))
       ) : (
         <h1>No challenged deals</h1>

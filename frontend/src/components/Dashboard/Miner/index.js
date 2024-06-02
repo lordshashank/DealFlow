@@ -24,7 +24,16 @@ export default function Miner() {
     args: data,
     functionName: "minerRecord",
   });
-  console.log(minerData);
+  // const minerDetails = {
+  //   miner: minerData[0],
+  //   paymentReciever: minerData[1],
+  //   token: minerData[2],
+  //   price: minerData[3],
+  //   location: minerData[4],
+  //   dealDuration: minerData[5],
+  //   verifiedDeal: minerData[6],
+  //   retrievalProvided: minerData[7],
+  // };
 
   useEffect(() => {
     async function fetchData() {

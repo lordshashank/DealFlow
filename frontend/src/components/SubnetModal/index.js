@@ -15,15 +15,17 @@ import { useMiner } from "@/context/minerContext";
 export default function SubnetModal({ isOpen, handleClose }) {
   const { user } = useUser();
   const [subnet, setSubnet] = useState({
-    minActivationCollateral: null,
-    minValidators: null,
-    bottomUpCheckPeriod: null,
-    activeValidatorsLimit: null,
-    majorityPercentage: null,
-    consensus: "",
-    powerScale: null,
-    permissionMode: "",
-    supplySource: "",
+    chainId: "314159",
+    route: "",
+    minActivationCollateral: 2,
+    minValidators: 2,
+    bottomUpCheckPeriod: 2,
+    activeValidatorsLimit: 2,
+    majorityPercentage: 2,
+    consensus: "fendermint",
+    powerScale: 1,
+    permissionMode: "collateral",
+    supplySource: "fil",
     subnetID: "314159",
   });
   const { handleAddSubnet } = useMiner();

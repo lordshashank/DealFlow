@@ -229,3 +229,30 @@ input[type="radio"]:focus-visible {
   background-color: rgba(var(--on-surface-variant), 0.12);
   outline: 2px solid rgba(var(--primary), 0.38);
 }
+
+.spinner {
+  border: 4px solid rgba(var(--on-surface-variant), 0.1);
+  border-top: 4px solid rgba(var(--primary), 1);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin: 0 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.toast {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  padding: 1rem;
+  border-radius: 12px;
+}

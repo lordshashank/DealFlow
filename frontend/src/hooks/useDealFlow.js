@@ -291,6 +291,28 @@ const useDealFlow = () => {
       console.log(error);
     }
   };
+  const challengeDealDup = async () => {
+    try {
+      const response = await writeContractAsync(
+        {
+          address: contractAddress.DealFlow,
+          abi: abi.DealFlow,
+          functionName: "getAllRegisteredMiners",
+        },
+        {
+          onSuccess: () => {
+            console.log("Deal Challenged Successfully!");
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return {
     registerMiner,
     proposeDeal,
@@ -303,6 +325,7 @@ const useDealFlow = () => {
     getMinerDetails,
     minerStake,
     challengeDeal,
+    challengeDealDup,
   };
 };
 export default useDealFlow;
