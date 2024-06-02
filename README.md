@@ -164,7 +164,7 @@ We don’t like backends in our dApps but this was not possible without Beryx AP
 
 ### Fleek
 
-Building a dApp and deploying only on centralized services don’t seem apt, we used Fleek to decentralize our deployments
+Building a dApp and deploying only on centralized services don’t seem apt, we used Fleek to decentralize our deployments. You can view our deployment at [https://deal-flow.on-fleek.app/](https://deal-flow.on-fleek.app/)
 
 _For more info, please refer to the [project](https://ethglobal.com/showcase/dealflow-af4xp)_
 
