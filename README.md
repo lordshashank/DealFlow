@@ -80,8 +80,11 @@ DealFlow: Unlocking Decentralized File Storage on Filecoin with Seamless Autonom
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 Storing Files in a decentralized way, not having to trust centralized servers, and having the same accessibility, who doesn’t want that?
+
 Filecoin has been leading in the space of decentralized storage and presents a perfect solution to the problem, at least on the protocol level. Still, there are many blockers in connecting users who want to store files and Storage providers who want to store them. Moreover, many of the existing solutions to store data in Filecoin have centralized points, are non-retrievable on-chain and there’s no way to verify the storage easily.
+
 DealFlow aims to solve these problems. It is an on-chain solution for the complete verifiable flow of storing files in Filecoin for SPs and end-users. It aims to give complete autonomy to both SPs to decide on their needs and specs and users to choose from different miners having various deliverables.
+
 The main features of DealFlow are:-
 
 - **IPC for scaling:** It's on-chain 🙂. However, having single transaction for each file on mainnet is not at all feasible. IPC comes to the rescue here. Miners can set up their own subnets on-chain from the DealFlow contract, decide its specs, and change or delete them. They can set up their hardware in coherence with subnet for robust deal making process.
@@ -121,13 +124,13 @@ You can look and interact with our frontend and backend code here. The frontend 
    ```sh
    git clone https://github.com/lordshashank/dealflow.git
    ```
-2. Initialize the backend
+2. Initialize the backend (You would have to put wallet private key in .env file to deploy, etc)
    ```sh
    cd contracts
    npm install
    npm hardhat compile
    ```
-3. Initialize the frontend
+3. Initialize the frontend (you would need beryx jwt token in .env to fetch data from beryx APIs)
    ```sh
    cd ../frontend
     npm install
@@ -157,13 +160,13 @@ Tellor comes into play for verification, FileCid and DealStatus specs of tellor 
 
 ### Beryx
 
-We don’t like backends in our dApps but this was not possible without Beryx APIs, they provided us directly usable APIs to fetch metadata for various Tokens miners can choose to pay from, giving them wide options and making our dApp give fast responses as well.
+We don’t like backends in our dApps but this was not possible without Beryx APIs, they provided us directly usable APIs to fetch metadata for deals, miners, getting deals by tipsets, etc. Moreover, the filecoin solidity library, that is core to DealFlow has been developed by Zondax only, making it integral part of our dApp.
 
 ### Fleek
 
 Building a dApp and deploying only on centralized services don’t seem apt, we used Fleek to decentralize our deployments
 
-_For more examples, please refer to the [project](https://ethglobal.com/showcase/dealflow-af4xp)_
+_For more info, please refer to the [project](https://ethglobal.com/showcase/dealflow-af4xp)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -141,8 +141,8 @@ export default function MinerModal() {
         <div className={styles.note}>
           <h6>Note : </h6>
           <p>
-            Once you confirm the details you will have to stake <b>1 Ether</b>{" "}
-            to proceed further and to host user data{" "}
+            Once you confirm the details you will have to stake{" "}
+            <b>0.00001 Fil</b> to proceed further and to host user data{" "}
           </p>
         </div>
         <div className={styles.actions}>

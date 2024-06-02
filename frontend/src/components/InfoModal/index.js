@@ -8,7 +8,7 @@ export default function InfoModal({ isOpen, handleClose, isSubnet }) {
   const { user } = useUser();
   const { subnets } = useMiner();
   const subnet = {
-    chainId: "314159",
+    subnetAddress: "0x1dB005683012BfEa84c54e2cc5616b89ead5b5fE",
     route: "0x52b832b3b44394c51297aea8f6dda56aae677eab",
     minActivationCollateral: 100000,
     minValidators: 1,

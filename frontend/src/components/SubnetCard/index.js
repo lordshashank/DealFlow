@@ -6,7 +6,8 @@ import Image from "next/image";
 import { useMiner } from "@/context/minerContext";
 
 export default function SubnetCard({ subnet, handleOpenInfoModal }) {
-  const { route, chainId, consensus, supplySource, permissionMode } = subnet;
+  const { route, subnetAddress, consensus, supplySource, permissionMode } =
+    subnet;
   const [showActions, setShowActions] = useState(false);
   const { handleDeleteSubnet } = useMiner();
   const actions = [
@@ -21,7 +22,7 @@ export default function SubnetCard({ subnet, handleOpenInfoModal }) {
     <div className={styles.container}>
       <div className={styles["subnet-header"]}>
         <div className={styles["deal-size"]}>
-          <p>{chainId}</p>
+          <p>{subnetAddress}</p>
         </div>
 
         <div className={styles["deal-actions"]}>

@@ -17,8 +17,8 @@ import toast from "react-hot-toast";
 export default function SubnetModal({ isOpen, handleClose }) {
   const { user } = useUser();
   const [subnet, setSubnet] = useState({
-    chainId: "317149",
-    route: "0x1dB005683012BfEa84c54e2cc5616b89ead5b5fE",
+    subnetAddress: "0x1dB005683012BfEa84c54e2cc5616b89ead5b5fE",
+    route: "0xcfF0204ae9A152eFbA3aB5Ef223575F8aFf66420",
     minActivationCollateral: 100000,
     minValidators: 1,
     bottomUpCheckPeriod: 2,
@@ -40,13 +40,31 @@ export default function SubnetModal({ isOpen, handleClose }) {
   const handleSelectMenuItem = (key, item) => {
     setSubnet({ ...subnet, [key]: item });
   };
-
+  const subnetParam = [
+    "100000", // minActivationCollateral
+    "1", // minValidators
+    "2", // bottomUpCheckPeriod
+    "0x6d25fbFac9e6215E03C687E54F7c74f489949EaF", // ipc gateway
+    "5", // activeValidatorlimit
+    "60", // majority percentage
+    "0", //"fendermint", // consensus type
+    "1", // power scale
+    "0", //"Collateral", // permission mode
+    [
+      "0", //native supply
+      "0x0000000000000000000000000000000000000000",
+    ],
+    [
+      "317149", //chain id
+      ["0x52b832b3b44394c51297aea8f6dda56aae677eab"], //route
+    ],
+  ];
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
       const minerId = user.minerDetails.minerId;
       const subnetParams = getSubnetParams(subnet);
-      const result = await spinSubnet(minerId, subnetParams);
+      const result = await spinSubnet("t017840", subnetParam);
       const dummyPromise = waitForSeconds(30);
       toast.promise(dummyPromise, {
         loading: "Registering Subnet...",
