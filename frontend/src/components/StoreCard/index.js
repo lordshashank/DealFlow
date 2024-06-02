@@ -1,15 +1,46 @@
 import Button from "@/reusables/Button";
 import styles from "./index.module.css";
 import { getTimeInDays } from "@/utils/helper";
+import Actions from "../DealCard/Actions";
+import Image from "next/image";
+import { useState } from "react";
 
-export default function StoreCard({ minerDetails, handleOpenDealModal }) {
+export default function StoreCard({
+  minerDetails,
+  handleOpenDealModal,
+  handleOpenInfoModal,
+}) {
   const { miner, price, pieceCid, time } = minerDetails;
+  const [showActions, setShowActions] = useState(false);
+
+  const actions = [
+    {
+      label: "View Info",
+      onClick: () => {
+        handleOpenInfoModal();
+        setShowActions(false);
+      },
+    },
+  ];
 
   return (
     <div className={styles.container}>
       <div className={styles["deal-header"]}>
         <div className={styles["deal-size"]}>
           <p>${price}/GB</p>
+        </div>
+        <div className={styles["deal-actions"]}>
+          <Image
+            className={styles.img}
+            src={"/three-dot.svg"}
+            alt="actions"
+            width={24}
+            height={24}
+            onClick={() => {
+              setShowActions(!showActions);
+            }}
+          />
+          {showActions && <Actions actions={actions} />}
         </div>
       </div>
       <div className={styles["deal-body"]}>
@@ -20,16 +51,14 @@ export default function StoreCard({ minerDetails, handleOpenDealModal }) {
         </div>
         <div className={styles["miner-address"]}>
           <p>
-            {miner} {" ("}
-            <span>Miner</span>
-            {")"}
+            <span>Miner: </span>
+            {miner}
           </p>
         </div>
         <div className={styles["miner-address"]}>
           <p>
-            {pieceCid} {" ("}
-            <span>CID</span>
-            {")"}
+            <span>CID: </span>
+            {pieceCid}
           </p>
         </div>
       </div>

@@ -11,24 +11,26 @@ import { paymentTokens } from "@/utils/paymentTokens";
 import { useState } from "react";
 import { sub } from "date-fns";
 import { useMiner } from "@/context/minerContext";
+import { getSubnetParams } from "@/utils/helper";
 
 export default function SubnetModal({ isOpen, handleClose }) {
   const { user } = useUser();
   const [subnet, setSubnet] = useState({
-    chainId: "314159",
-    route: "",
-    minActivationCollateral: 2,
-    minValidators: 2,
+    chainId: "317149",
+    route: "0x52b832b3b44394c51297aea8f6dda56aae677eab",
+    minActivationCollateral: 100000,
+    minValidators: 1,
     bottomUpCheckPeriod: 2,
-    activeValidatorsLimit: 2,
-    majorityPercentage: 2,
+    activeValidatorsLimit: 5,
+    majorityPercentage: 60,
     consensus: "fendermint",
     powerScale: 1,
     permissionMode: "collateral",
-    supplySource: "fil",
+    supplySource: "native",
     subnetID: "314159",
   });
   const { handleAddSubnet } = useMiner();
+  const { spinSubnet } = useDealFlow();
   const handleChangeDetails = (e) => {
     const { name, value } = e.target;
     setSubnet({ ...subnet, [name]: value });
@@ -41,7 +43,10 @@ export default function SubnetModal({ isOpen, handleClose }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await handleAddSubnet(subnet);
+      const minerId = user.minerDetails.minerId;
+      const subnetParams = getSubnetParams(subnet);
+      await spinSubnet(minerId, subnetParams);
+      handleAddSubnet(subnet);
       handleClose();
     } catch (error) {
       console.log(error);

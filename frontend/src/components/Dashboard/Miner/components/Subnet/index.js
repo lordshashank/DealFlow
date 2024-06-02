@@ -5,6 +5,7 @@ import Button from "@/reusables/Button";
 import { useState } from "react";
 import useDealClient from "@/hooks/useDealClient";
 import { useMiner } from "@/context/minerContext";
+import InfoModal from "@/components/InfoModal";
 
 const dummyMiner = {
   miner: "t3xv7b7v6",
@@ -15,6 +16,7 @@ const dummyMiner = {
 
 export default function Subnet() {
   const [isOpen, setIsOpen] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
   const [file, setFile] = useState(null);
   const { makeDealProposal } = useDealClient();
   const { subnets } = useMiner();
@@ -22,28 +24,44 @@ export default function Subnet() {
   const handleOpenSubnetModal = () => {
     setIsOpen(true);
   };
+  const handleOpenInfoModal = () => {
+    setOpenInfo(true);
+  };
   const handleMakeDeal = () => {
     if (!file) return;
     console.log(file);
   };
   return (
     <div className={styles.container}>
+      <div className={styles.btn}>
+        <Button
+          label="CREATE SUBNET"
+          variant="primary"
+          size="large"
+          onClick={handleOpenSubnetModal}
+        />
+      </div>
+
       <div className={styles.subnets}>
         {subnets.map((subnet) => (
-          <SubnetCard subnet={subnet} key={subnet.subnetID} />
+          <SubnetCard
+            subnet={subnet}
+            key={subnet.subnetID}
+            handleOpenInfoModal={handleOpenInfoModal}
+          />
         ))}
       </div>
-      <Button
-        label="CREATE SUBNET"
-        variant="primary"
-        size="large"
-        onClick={handleOpenSubnetModal}
-      />
+
       <SubnetModal
         isOpen={isOpen}
         handleClose={() => {
           setIsOpen(false);
         }}
+      />
+      <InfoModal
+        isOpen={openInfo}
+        handleClose={() => setOpenInfo(false)}
+        isSubnet
       />
     </div>
   );

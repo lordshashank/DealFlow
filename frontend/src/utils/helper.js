@@ -18,3 +18,51 @@ export const getTimeInDays = (seconds) => {
   const days = Math.floor(seconds / (3600 * 24));
   return days;
 };
+
+const consensuses = {
+  fendermint: "0",
+};
+const supplySources = {
+  native: "0",
+  cusdt: "0x4a8c75f0318C1D9Aeff3e9345f4BAcC78D6D6779",
+};
+
+const permissionModes = {
+  collateral: "0",
+  federated: "1",
+  static: "2",
+};
+
+export const getSubnetParams = (subnet) => {
+  const {
+    route,
+    chainId,
+    consensus,
+    supplySource,
+    permissionMode,
+    minActivationCollateral,
+    minValidators,
+    bottomUpCheckPeriod,
+    ipcGateway = "0x6d25fbFac9e6215E03C687E54F7c74f489949EaF",
+    activeValidatorsLimit,
+    majorityPercentage,
+    powerScale,
+    subnetID,
+  } = subnet;
+  return [
+    minActivationCollateral.toString(),
+    minValidators.toString(),
+    bottomUpCheckPeriod.toString(),
+    ipcGateway,
+    activeValidatorsLimit.toString(),
+    majorityPercentage.toString(),
+    consensuses[consensus.toLowerCase()],
+    powerScale.toString(),
+    permissionModes[permissionMode.toLowerCase()],
+    [
+      supplySources[supplySource.toLowerCase()],
+      "0x0000000000000000000000000000000000000000",
+    ],
+    [chainId, [route]],
+  ];
+};

@@ -5,7 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useMiner } from "@/context/minerContext";
 
-export default function SubnetCard({ subnet }) {
+export default function SubnetCard({ subnet, handleOpenInfoModal }) {
   const { route, chainId, consensus, supplySource, permissionMode } = subnet;
   const [showActions, setShowActions] = useState(false);
   const { handleDeleteSubnet } = useMiner();
@@ -41,7 +41,7 @@ export default function SubnetCard({ subnet }) {
       <div className={styles["subnet-body"]}>
         <div className={styles["subnet-address"]}>
           <p>
-            {"Parent Contract"} {" ("}
+            {route} {" ("}
             <span>Route</span>
             {")"}
           </p>
@@ -69,13 +69,7 @@ export default function SubnetCard({ subnet }) {
         </div>
       </div>
       <div className={styles.actions}>
-        <Button
-          label="View Info"
-          size="medium"
-          onClick={() => {
-            console.log("view info");
-          }}
-        />
+        <Button label="View Info" size="medium" onClick={handleOpenInfoModal} />
       </div>
     </div>
   );

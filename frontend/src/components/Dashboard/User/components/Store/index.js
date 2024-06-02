@@ -7,6 +7,7 @@ import { useDeals } from "@/context/DealContext";
 import toast from "react-hot-toast";
 import { useUser } from "@/context/userContext";
 import useToken from "@/hooks/useToken";
+import InfoModal from "@/components/InfoModal";
 
 import CID from "cids";
 import { set } from "date-fns";
@@ -35,14 +36,15 @@ const DealRequestStruct = [
 ];
 
 const dummyMiner = {
-  miner: "t3xv7b7v6",
-  pieceCid: "bafykbzaced6w",
-  time: 3049483,
+  miner: "t017840",
+  pieceCid: "baga6ea4seaqim3kdcgv4psrxyfobuihyvgs3h5ks6qcv5he3keoasdkxot6gihi",
   price: 12,
+  time: "20000000",
 };
 
 export default function Store() {
   const [isOpen, setIsOpen] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
   const [file, setFile] = useState(null);
   const { makeDealProposal } = useDealClient();
   const { handleAddDeal } = useDeals();
@@ -52,6 +54,9 @@ export default function Store() {
 
   const handleOpenDealModal = () => {
     setIsOpen(true);
+  };
+  const handleOpenInfoModal = () => {
+    setOpenInfo(true);
   };
   const handleMakeDeal = async () => {
     if (!file) return;
@@ -85,6 +90,7 @@ export default function Store() {
       <StoreCard
         minerDetails={dummyMiner}
         handleOpenDealModal={handleOpenDealModal}
+        handleOpenInfoModal={handleOpenInfoModal}
       />
       <UploadModal
         file={file}
@@ -93,6 +99,12 @@ export default function Store() {
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
         handleMakeDeal={handleMakeDeal}
+      />
+      <InfoModal
+        isOpen={openInfo}
+        handleClose={() => {
+          setOpenInfo(false);
+        }}
       />
     </div>
   );

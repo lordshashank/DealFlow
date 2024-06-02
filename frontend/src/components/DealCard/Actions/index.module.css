@@ -29,7 +29,8 @@
   background-clip: border-box;
 }
 
-.action > p {
+.action > p,
+.action > a {
   color: #2d2b2b;
   font-size: 12px;
   font-weight: 500;

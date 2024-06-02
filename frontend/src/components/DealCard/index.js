@@ -7,6 +7,7 @@ import Actions from "./Actions";
 import { useDeals } from "@/context/DealContext";
 import toast from "react-hot-toast";
 import useDealFlow from "@/hooks/useDealFlow";
+import { useRouter } from "next/navigation";
 
 export default function DealCard({ deal, isChallenge = false }) {
   const [showActions, setShowActions] = useState(false);
@@ -14,6 +15,7 @@ export default function DealCard({ deal, isChallenge = false }) {
   const { user } = useUser();
   const { handleStatusChange } = useDeals();
   const { challengeDealDup } = useDealFlow();
+  const router = useRouter();
   const actions =
     user.role === "user"
       ? isChallenge
@@ -43,9 +45,7 @@ export default function DealCard({ deal, isChallenge = false }) {
             },
             {
               label: "View Deal",
-              onClick: () => {
-                console.log("View Deal");
-              },
+              path: "https://calibration.filfox.info/en/deal/195236",
             },
           ]
       : [

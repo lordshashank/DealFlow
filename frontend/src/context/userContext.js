@@ -12,7 +12,7 @@ const defaultUser = {
   minerDetails: {
     minerId: "t017840",
     paymentReceiver: "0x68de4962694b8e8ee61d59d8acb4e142e8e5ba51",
-    token: "",
+    token: "CUSDT",
     price: "1000000",
     location: "asia",
     dealDuration: "10000000",
