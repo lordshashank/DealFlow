@@ -168,7 +168,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             label={"SUPPLY SOURCE :"}
             state={"enabled"}
             selected={subnet.supplySource}
-            list={["FIL", "USDC", "USDT"]}
+            list={["native", "cusdt"]}
             handleSelectMenuItem={(item) => {
               handleSelectMenuItem("supplySource", item);
             }}
@@ -179,7 +179,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             variant="single"
             name="subnetID"
             placeholder="SUBNET ID"
-            label={"SUBNET ID :"}
+            label={"CHAIN ID :"}
             state={"enabled"}
             selected={subnet.subnetID}
             list={["314159"]}
