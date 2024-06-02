@@ -36,13 +36,15 @@ export default function MinerModal() {
       const result = registerMiner(minerDetails);
       toast.promise(result, {
         loading: "Registering Miner...",
-        success: "Miner Registered!",
+        success: (data) => {
+          handleChangeUser("isRegistered", true);
+          router.push("/dashboard?");
+          return "Miner Registered!";
+        },
         error: "Failed to Register",
       });
 
       // await minerStake();
-      handleChangeUser("isRegistered", true);
-      router.push("/dashboard?");
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +69,8 @@ export default function MinerModal() {
           <Selector
             variant="single"
             name="token"
-            placeholder="PREFERRED PAYMENT TOKEN"
+            label={"PREFERRED PAYMENT TOKEN :"}
+            placeholder={"PREFERRED"}
             state={"enabled"}
             selected={getKeyByValue(paymentTokens, user.minerDetails.token)}
             list={Object.keys(paymentTokens)}
@@ -79,12 +82,14 @@ export default function MinerModal() {
           />
           <TextField
             name="minerId"
+            label="MINER ID :"
             placeholder="MINER ID"
             value={user.minerDetails.minerId}
             onChange={handleChangeDetails}
           />
           <TextField
             name="price"
+            label="PRICE PER GB :"
             placeholder="PRICE PER GB"
             value={user.minerDetails.price}
             onChange={handleChangeDetails}
@@ -93,11 +98,13 @@ export default function MinerModal() {
           <TextField
             name="location"
             placeholder="LOCATION"
+            label="LOCATION :"
             value={user.minerDetails.location}
             onChange={handleChangeDetails}
           />
           <TextField
             name="dealDuration"
+            label="MAX DEAL DURATION (IN MINS) :"
             placeholder="MAX DEAL DURATION (IN MINS)"
             value={user.minerDetails.dealDuration}
             onChange={handleChangeDetails}
@@ -105,6 +112,7 @@ export default function MinerModal() {
           <Selector
             variant="single"
             name="verifiedDeal"
+            label="VERIFIED DEAL :"
             placeholder="VERIFIED DEAL"
             state={"enabled"}
             selected={user.minerDetails.verifiedDeal ? "Yes" : "No"}
@@ -119,6 +127,7 @@ export default function MinerModal() {
             variant="single"
             name="retrievalProvided"
             placeholder="RETRIEVAL PROVIDED"
+            label="RETRIEVAL PROVIDED :"
             state={"enabled"}
             selected={user.minerDetails.retrievalProvided ? "Yes" : "No"}
             list={["Yes", "No"]}

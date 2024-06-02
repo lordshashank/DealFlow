@@ -6,6 +6,7 @@ import useDealFlow from "@/hooks/useDealFlow";
 import styles from "./index.module.css";
 import { useReadContract } from "wagmi";
 import { contractAddress, abi } from "../../../../constants";
+import { useDeals } from "@/context/DealContext";
 export default function Miner() {
   const list = ["pending", "active", "challenged", "subnet"];
   const [selected, setSelected] = useState("active");
@@ -34,6 +35,10 @@ export default function Miner() {
   //   verifiedDeal: minerData[6],
   //   retrievalProvided: minerData[7],
   // };
+  const { filterDeals } = useDeals();
+  const activeDeals = filterDeals("active");
+  const pendingDeals = filterDeals("pending");
+  const challengedDeals = filterDeals("challenged");
 
   useEffect(() => {
     async function fetchData() {
@@ -50,9 +55,18 @@ export default function Miner() {
         selected={selected}
       />
       <div className={styles["selected-container"]}>
-        {selected === "active" && <Active />}
-        {selected === "pending" && <Pending />}
-        {selected === "challenged" && <Challenged />}
+        {selected === "active" && (
+          <Active deals={[]} message={"No Active Deals"} />
+        )}
+        {selected === "pending" && (
+          <Active deals={pendingDeals} message={"No Pending Deals!"} />
+        )}
+        {selected === "challenged" && (
+          <Challenged
+            deals={challengedDeals}
+            message={"No Chanllenged Deals!"}
+          />
+        )}
         {selected === "subnet" && <Subnet />}
       </div>
     </div>

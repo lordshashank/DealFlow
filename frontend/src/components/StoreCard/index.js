@@ -10,7 +10,7 @@ export default function StoreCard({
   handleOpenDealModal,
   handleOpenInfoModal,
 }) {
-  const { miner, price, pieceCid, time } = minerDetails;
+  const { miner, price, token, time } = minerDetails;
   const [showActions, setShowActions] = useState(false);
 
   const actions = [
@@ -57,8 +57,8 @@ export default function StoreCard({
         </div>
         <div className={styles["miner-address"]}>
           <p>
-            <span>CID: </span>
-            {pieceCid}
+            <span>TOKEN: </span>
+            {token}
           </p>
         </div>
       </div>

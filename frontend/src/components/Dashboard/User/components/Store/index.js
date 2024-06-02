@@ -35,12 +35,20 @@ const DealRequestStruct = [
   extraParamsV1,
 ];
 
-const dummyMiner = {
-  miner: "t017840",
-  pieceCid: "baga6ea4seaqim3kdcgv4psrxyfobuihyvgs3h5ks6qcv5he3keoasdkxot6gihi",
-  price: 12,
-  time: "20000000",
-};
+const dummyMiners = [
+  {
+    miner: "t017840",
+    token: "CUSDT",
+    price: 12,
+    time: "20000000",
+  },
+  {
+    miner: "t017837",
+    token: "FIL",
+    price: 5,
+    time: "19000000",
+  },
+];
 
 export default function Store() {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,11 +95,13 @@ export default function Store() {
   };
   return (
     <div className={styles.container}>
-      <StoreCard
-        minerDetails={dummyMiner}
-        handleOpenDealModal={handleOpenDealModal}
-        handleOpenInfoModal={handleOpenInfoModal}
-      />
+      {dummyMiners.map((miner) => (
+        <StoreCard
+          minerDetails={miner}
+          handleOpenDealModal={handleOpenDealModal}
+          handleOpenInfoModal={handleOpenInfoModal}
+        />
+      ))}
       <UploadModal
         file={file}
         setFile={setFile}

@@ -6,6 +6,7 @@ import { Store } from "./components";
 import { useReadContract } from "wagmi";
 import { contractAddress, abi } from "../../../../constants";
 import { useUser } from "@/context/userContext";
+import { useDeals } from "@/context/DealContext";
 export default function User() {
   const list = ["pending", "active", "challenged", "store"];
   const [selected, setSelected] = useState("store");
@@ -20,6 +21,11 @@ export default function User() {
     abi: abi.DealFlow,
     functionName: "userDeals",
   });
+
+  const { filterDeals } = useDeals();
+  const activeDeals = filterDeals("active");
+  const pendingDeals = filterDeals("pending");
+  const challengedDeals = filterDeals("challenged");
   console.log(result.data, result.isFetched, result.isSuccess);
   return (
     <div className={styles.container}>
@@ -29,9 +35,18 @@ export default function User() {
         selected={selected}
       />
       <div className={styles["selected-container"]}>
-        {selected === "active" && <Active />}
-        {selected === "pending" && <Pending />}
-        {selected === "challenged" && <Challenged />}
+        {selected === "active" && (
+          <Active deals={activeDeals} message={"No Active Deals"} />
+        )}
+        {selected === "pending" && (
+          <Active deals={pendingDeals} message={"No Pending Deals!"} />
+        )}
+        {selected === "challenged" && (
+          <Challenged
+            deals={challengedDeals}
+            message={"No Chanllenged Deals!"}
+          />
+        )}
         {selected === "store" && <Store />}
       </div>
     </div>

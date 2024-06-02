@@ -27,10 +27,6 @@ export default function Subnet() {
   const handleOpenInfoModal = () => {
     setOpenInfo(true);
   };
-  const handleMakeDeal = () => {
-    if (!file) return;
-    console.log(file);
-  };
   return (
     <div className={styles.container}>
       <div className={styles.btn}>

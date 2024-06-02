@@ -69,3 +69,11 @@ export const getSubnetParams = (subnet) => {
 export function getKeyByValue(object, value) {
   return Object.entries(object).find(([key, val]) => val === value)?.[0];
 }
+
+export async function waitForSeconds(seconds) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, seconds * 1000);
+  });
+}

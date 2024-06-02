@@ -11,13 +11,14 @@ import { paymentTokens } from "@/utils/paymentTokens";
 import { useState } from "react";
 import { sub } from "date-fns";
 import { useMiner } from "@/context/minerContext";
-import { getSubnetParams } from "@/utils/helper";
+import { getSubnetParams, waitForSeconds } from "@/utils/helper";
+import toast from "react-hot-toast";
 
 export default function SubnetModal({ isOpen, handleClose }) {
   const { user } = useUser();
   const [subnet, setSubnet] = useState({
     chainId: "317149",
-    route: "0x52b832b3b44394c51297aea8f6dda56aae677eab",
+    route: "0x1dB005683012BfEa84c54e2cc5616b89ead5b5fE",
     minActivationCollateral: 100000,
     minValidators: 1,
     bottomUpCheckPeriod: 2,
@@ -45,9 +46,17 @@ export default function SubnetModal({ isOpen, handleClose }) {
     try {
       const minerId = user.minerDetails.minerId;
       const subnetParams = getSubnetParams(subnet);
-      await spinSubnet(minerId, subnetParams);
-      handleAddSubnet(subnet);
-      handleClose();
+      const result = await spinSubnet(minerId, subnetParams);
+      const dummyPromise = waitForSeconds(30);
+      toast.promise(dummyPromise, {
+        loading: "Registering Subnet...",
+        success: (data) => {
+          handleAddSubnet(subnet);
+          handleClose();
+          return "Subnet Registered!";
+        },
+        error: "Failed to Register",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +71,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             type={"number"}
             name="minActivationCollateral"
             placeholder="MINIMUM ACTIVATION COLLATERAL"
+            label={"MINIMUM ACTIVATION COLLATERAL :"}
             value={subnet.minActivationCollateral}
             onChange={handleChangeDetails}
           />
@@ -69,6 +79,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             type={"number"}
             name="minValidators"
             placeholder="MINIMUM VALIDATORS"
+            label={"MINIMUM VALIDATORS :"}
             value={subnet.minValidators}
             onChange={handleChangeDetails}
           />
@@ -76,12 +87,14 @@ export default function SubnetModal({ isOpen, handleClose }) {
             type={"number"}
             name="bottomUpCheckPeriod"
             placeholder="BOTTOM UP CHECK PERIOD"
+            label={"BOTTOM UP CHECK PERIOD :"}
             value={subnet.bottomUpCheckPeriod}
             onChange={handleChangeDetails}
           />
           <TextField
             type={"number"}
             name="activeValidatorsLimit"
+            label={"ACTIVE VALIDATORS LIMIT :"}
             placeholder="ACTIVE VALIDATORS LIMIT"
             value={subnet.activeValidatorsLimit}
             onChange={handleChangeDetails}
@@ -90,6 +103,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             type={"number"}
             name="majorityPercentage"
             placeholder="MAJORITY PERCENTAGE"
+            label={"MAJORITY PERCENTAGE :"}
             value={subnet.majorityPercentage}
             onChange={handleChangeDetails}
           />
@@ -97,6 +111,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             variant="single"
             name="consensus"
             placeholder="CONSENSUS"
+            label={"CONSENSUS :"}
             state={"enabled"}
             selected={subnet.consensus}
             list={["Fendermint"]}
@@ -109,6 +124,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
           <TextField
             type={"number"}
             name="powerScale"
+            label={"POWER SCALE :"}
             placeholder="POWER SCALE"
             value={subnet.powerScale}
             onChange={handleChangeDetails}
@@ -117,6 +133,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             variant="single"
             name="permissionMode"
             placeholder="PERMISSION MODE"
+            label={"PERMISSION MODE :"}
             state={"enabled"}
             selected={subnet.permissionMode}
             list={["collateral", "federated", "static"]}
@@ -130,6 +147,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             variant="single"
             name="supplySource"
             placeholder="SUPPLY SOURCE"
+            label={"SUPPLY SOURCE :"}
             state={"enabled"}
             selected={subnet.supplySource}
             list={["FIL", "USDC", "USDT"]}
@@ -143,6 +161,7 @@ export default function SubnetModal({ isOpen, handleClose }) {
             variant="single"
             name="subnetID"
             placeholder="SUBNET ID"
+            label={"SUBNET ID :"}
             state={"enabled"}
             selected={subnet.subnetID}
             list={["314159"]}

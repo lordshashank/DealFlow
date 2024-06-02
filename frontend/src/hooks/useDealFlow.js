@@ -103,6 +103,7 @@ const useDealFlow = () => {
           },
         }
       );
+      return response;
     } catch (error) {
       console.log(error);
     }

@@ -111,12 +111,7 @@ const Selector = ({
               onClick={handleDropDown}
             />
           </div>
-          <p
-            className={
-              state == "disabled" ? styles["label-disabled"] : labelClass
-            }
-            style={{ marginLeft: "16px" }}
-          >
+          <p className={`${styles.label} ${isFocused ? styles.focused : ""}`}>
             {label}
           </p>
         </div>
