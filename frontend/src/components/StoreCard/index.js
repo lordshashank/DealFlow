@@ -1,16 +1,19 @@
 import Button from "@/reusables/Button";
 import styles from "./index.module.css";
-import { getTimeInDays } from "@/utils/helper";
+import { getKeyByValue, getTimeInDays } from "@/utils/helper";
 import Actions from "../DealCard/Actions";
 import Image from "next/image";
 import { useState } from "react";
+import { contractAddress, abi } from "../../../constants";
+import { useReadContract } from "wagmi";
+import { paymentTokens } from "@/utils/paymentTokens";
+import CardSkeleton from "@/reusables/CardSkeleton";
 
 export default function StoreCard({
-  minerDetails,
+  miner,
   handleOpenDealModal,
   handleOpenInfoModal,
 }) {
-  const { miner, price, token, time } = minerDetails;
   const [showActions, setShowActions] = useState(false);
 
   const actions = [
@@ -22,12 +25,36 @@ export default function StoreCard({
       },
     },
   ];
+  const { data: minerDetails, isLoading } = useReadContract({
+    address: contractAddress.DealFlow,
+    args: [miner],
+    abi: abi.DealFlow,
+    functionName: "minerRecord",
+  });
+
+  if (isLoading) return <CardSkeleton />;
+
+  if (!minerDetails)
+    return <h2 className={styles.heading}>No Active Miners Found!</h2>;
+
+  const [
+    minerId,
+    paymentReciever,
+    token,
+    price,
+    location,
+    dealDuration,
+    verifiedDeal,
+    retrievalProvided,
+  ] = minerDetails;
+
+  console.log(minerDetails);
 
   return (
     <div className={styles.container}>
       <div className={styles["deal-header"]}>
         <div className={styles["deal-size"]}>
-          <p>${price}/GB</p>
+          <p>${Number(price)}/GB</p>
         </div>
         <div className={styles["deal-actions"]}>
           <Image
@@ -46,19 +73,19 @@ export default function StoreCard({
       <div className={styles["deal-body"]}>
         <div className={styles["miner-address"]}>
           <p>
-            For <b>{getTimeInDays(time)} DAYS</b>
+            For <b>{getTimeInDays(Number(dealDuration))} DAYS</b>
           </p>
         </div>
         <div className={styles["miner-address"]}>
           <p>
             <span>Miner: </span>
-            {miner}
+            {minerId}
           </p>
         </div>
         <div className={styles["miner-address"]}>
           <p>
             <span>TOKEN: </span>
-            {token}
+            {getKeyByValue(paymentTokens, token)}
           </p>
         </div>
       </div>

@@ -2,10 +2,7 @@ import DashboardNav from "@/reusables/DashboardNav";
 import { useState, useEffect } from "react";
 import { Active, Pending, Challenged } from "../components";
 import { Subnet } from "./components";
-import useDealFlow from "@/hooks/useDealFlow";
 import styles from "./index.module.css";
-import { useReadContract } from "wagmi";
-import { contractAddress, abi } from "../../../../constants";
 import { useDeals } from "@/context/DealContext";
 export default function Miner() {
   const list = ["pending", "active", "challenged", "subnet"];
@@ -13,18 +10,6 @@ export default function Miner() {
   const handleSelectMenuItem = (item) => {
     setSelected(item);
   };
-
-  const { data, isFetched, isPending, refetch, isSuccess } = useReadContract({
-    address: contractAddress.DealFlow,
-    abi: abi.DealFlow,
-    functionName: "getAllRegisteredMiners",
-  });
-  const { data: minerData, refetch: refetchMiner } = useReadContract({
-    address: contractAddress.DealFlow,
-    abi: abi.DealFlow,
-    args: data,
-    functionName: "minerRecord",
-  });
   // const minerDetails = {
   //   miner: minerData[0],
   //   paymentReciever: minerData[1],
@@ -39,14 +24,6 @@ export default function Miner() {
   const activeDeals = filterDeals("active");
   const pendingDeals = filterDeals("pending");
   const challengedDeals = filterDeals("challenged");
-
-  useEffect(() => {
-    async function fetchData() {
-      const result = await refetchMiner();
-      console.log(result.data);
-    }
-    isFetched && fetchData();
-  }, [isFetched]);
   return (
     <div className={styles.container}>
       <DashboardNav

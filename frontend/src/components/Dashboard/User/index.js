@@ -14,19 +14,11 @@ export default function User() {
   const handleSelectMenuItem = (item) => {
     setSelected(item);
   };
-  console.log(user.address);
-  const result = useReadContract({
-    address: contractAddress.DealFlow,
-    args: [user.address],
-    abi: abi.DealFlow,
-    functionName: "userDeals",
-  });
 
   const { filterDeals } = useDeals();
   const activeDeals = filterDeals("active");
   const pendingDeals = filterDeals("pending");
   const challengedDeals = filterDeals("challenged");
-  console.log(result.data, result.isFetched, result.isSuccess);
   return (
     <div className={styles.container}>
       <DashboardNav

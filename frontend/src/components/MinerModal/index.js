@@ -15,7 +15,6 @@ export default function MinerModal() {
   const { user, handleChangeMinerDetails, handleChangeUser } = useUser();
   const router = useRouter();
   const { minerStake, registerMiner } = useDealFlow();
-  console.log(user);
 
   const openModal =
     user.role === "miner" && !user.isRegistered && user.isConnected;

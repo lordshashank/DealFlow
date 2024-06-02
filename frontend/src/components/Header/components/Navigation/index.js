@@ -23,7 +23,6 @@ function Navigation() {
   const { isConnected } = useAccount();
   const { user } = useUser();
   const pathname = usePathname();
-  console.log(pathname);
   const minerParams = [
     "t017840",
     "0x68de4962694b8e8ee61d59d8acb4e142e8e5ba51",

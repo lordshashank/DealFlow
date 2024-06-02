@@ -1,16 +1,20 @@
 import StoreCard from "@/components/StoreCard";
 import styles from "../../../index.module.css";
 import UploadModal from "@/components/UploadModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDealClient from "@/hooks/useDealClient";
+import useDealFlow from "@/hooks/useDealFlow";
 import { useDeals } from "@/context/DealContext";
 import toast from "react-hot-toast";
 import { useUser } from "@/context/userContext";
 import useToken from "@/hooks/useToken";
 import InfoModal from "@/components/InfoModal";
+import { contractAddress, abi } from "../../../../../../constants";
 
 import CID from "cids";
 import { set } from "date-fns";
+import { useReadContract } from "wagmi";
+import Loader from "@/reusables/Loader";
 const cid = new CID(
   "baga6ea4seaqim3kdcgv4psrxyfobuihyvgs3h5ks6qcv5he3keoasdkxot6gihi"
 );
@@ -55,8 +59,8 @@ export default function Store() {
   const [openInfo, setOpenInfo] = useState(false);
   const [file, setFile] = useState(null);
   const { makeDealProposal } = useDealClient();
+  const { getAllRegisteredMiners, getMinerDetails } = useDealFlow();
   const { handleAddDeal } = useDeals();
-  const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const { mint, approve } = useToken();
 
@@ -93,19 +97,30 @@ export default function Store() {
       error: "Something went wrong!",
     });
   };
+  const { data: miners, isLoading } = useReadContract({
+    address: contractAddress.DealFlow,
+    abi: abi.DealFlow,
+    functionName: "getAllRegisteredMiners",
+  });
+
+  console.log(miners);
+
+  if (isLoading) return <Loader />;
   return (
     <div className={styles.container}>
-      {dummyMiners.map((miner) => (
-        <StoreCard
-          minerDetails={miner}
-          handleOpenDealModal={handleOpenDealModal}
-          handleOpenInfoModal={handleOpenInfoModal}
-        />
-      ))}
+      {miners &&
+        miners.map((miner) => (
+          <StoreCard
+            key={miner}
+            miner={miner}
+            handleOpenDealModal={handleOpenDealModal}
+            handleOpenInfoModal={handleOpenInfoModal}
+          />
+        ))}
       <UploadModal
         file={file}
         setFile={setFile}
-        isLoading={isLoading}
+        isLoading={false}
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
         handleMakeDeal={handleMakeDeal}

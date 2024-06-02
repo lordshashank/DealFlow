@@ -23,7 +23,6 @@ export default function InfoModal({ isOpen, handleClose, isSubnet }) {
   };
   const { minerDetails } = user;
 
-  console.log(minerDetails);
   return (
     <Modal open={isOpen} handleClose={handleClose}>
       <div className={styles.container}>
@@ -33,7 +32,7 @@ export default function InfoModal({ isOpen, handleClose, isSubnet }) {
               <h1>Miner</h1>
               <div className={styles.body}>
                 {Object.keys(minerDetails).map((key) => (
-                  <div className={styles.row}>
+                  <div className={styles.row} key={key}>
                     <p>
                       <b>{key}</b>
                     </p>
@@ -48,7 +47,7 @@ export default function InfoModal({ isOpen, handleClose, isSubnet }) {
             <h1>Subnet</h1>
             <div className={styles.body}>
               {Object.keys(subnet).map((key) => (
-                <div className={styles.row}>
+                <div className={styles.row} key={key}>
                   <p>
                     <b>{key}</b>
                   </p>
