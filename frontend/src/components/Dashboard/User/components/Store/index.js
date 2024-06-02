@@ -5,6 +5,8 @@ import { useState } from "react";
 import useDealClient from "@/hooks/useDealClient";
 import { useDeals } from "@/context/DealContext";
 import toast from "react-hot-toast";
+import { useUser } from "@/context/userContext";
+import useToken from "@/hooks/useToken";
 
 import CID from "cids";
 import { set } from "date-fns";
@@ -45,12 +47,18 @@ export default function Store() {
   const { makeDealProposal } = useDealClient();
   const { handleAddDeal } = useDeals();
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useUser();
+  const { mint, approve } = useToken();
 
   const handleOpenDealModal = () => {
     setIsOpen(true);
   };
   const handleMakeDeal = async () => {
     if (!file) return;
+    const amount =
+      Number(user.minerDetails.price) * (268435456 / (1024 * 1024 * 1024));
+    await mint(user.address, "10000000000000");
+    await approve(user.minerDetails.paymentReceiver, amount.toString());
     const result = makeDealProposal(DealRequestStruct);
     toast.promise(result, {
       loading: "Making Deal...",

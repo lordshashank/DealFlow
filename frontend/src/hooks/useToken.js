@@ -1,7 +1,7 @@
 import { contractAddress, abi } from "../../constants";
 import { useWriteContract, useReadContract } from "wagmi";
 
-const UseToken = () => {
+const useToken = () => {
   const { writeContractAsync } = useWriteContract();
 
   const mint = async (to, amount) => {
@@ -100,4 +100,4 @@ const UseToken = () => {
 
   return { mint, approve, allowance, balanceOf };
 };
-export default UseToken;
+export default useToken;

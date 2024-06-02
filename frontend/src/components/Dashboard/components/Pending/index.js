@@ -8,13 +8,13 @@ export default function Pending() {
   const { filterDeals, handleStatusChange } = useDeals();
   const pendingDeals = filterDeals("pending");
 
-  useEffect(() => {
-    if (pendingDeals.length > 0) {
-      setTimeout(() => {
-        handleStatusChange(pendingDeals[0].fileName, "active");
-      }, 10000);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (pendingDeals.length > 0) {
+  //     setTimeout(() => {
+  //       handleStatusChange(pendingDeals[0].fileName, "active");
+  //     }, 10000);
+  //   }
+  // }, []);
   return (
     <div className={styles.container}>
       {pendingDeals.length > 0 ? (
